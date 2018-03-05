@@ -1,0 +1,13 @@
+{
+  "name": "aws-alexa-color-my-lights",
+  "version": "0.0.1",
+  "description": "Alexa skill to color Lifx LED bulbs.",
+  "dependencies": {
+    "aws-sdk": "^2.188.0",
+    "get-image-colors": "^1.8.1",
+    "get-pixels": "^3.3.0",
+    "get-rgba-palette": "^2.0.1",
+    "img": "^3.0.3",
+    "rgb-hex": "^2.1.0"
+  }
+}
