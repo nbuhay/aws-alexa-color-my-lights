@@ -14,9 +14,10 @@ const https = require('https')
     , LIFX_APP_TOKEN = process.env.LIFX_APP_TOKEN
     , RGB_COLOR_COUNT = process.env.RGB_COLOR_COUNT
     , RGB_QUALITY = process.env.RGB_QUALITY
+    , AWS_DYNAMODB_ENDPOINT = process.env.AWS_DYNAMODB_ENDPOINT
 
-AWS.config.update({region: 'us-east-1', endpoint: 'http://localhost:8000'})
-  
+AWS.config.update({ region: 'us-east-1', endpoint: AWS_DYNAMODB_ENDPOINT })
+
 const dynamodb = new AWS.DynamoDB()
 
 let SPOTIFY_ACCESS_TOKEN = process.env.SPOTIFY_ACCESS_TOKEN 
@@ -268,4 +269,19 @@ function lifxPutColors(albumHexColors, lifxLights) {
     .catch((err) => { throw new Error(`lifxPutColors: ${err}`) });
 }
 
-color();
+module.exports = {
+  color
+}
+
+/* start-test-block */
+module.exports.__testonly__ =  {
+  spotifyRefreshToken: spotifyRefreshToken,
+  spotifyGetCurrentlyPlaying: spotifyGetCurrentlyPlaying,
+  spotifyGetAlbumImage: spotifyGetAlbumImage,
+  getColors: getColors,
+  awsDynamodbPutColors: awsDynamodbPutColors,
+  awsDynamodbGetColors: awsDynamodbGetColors,
+  lifxGetAllLights: lifxGetAllLights,
+  lifxPutColors: lifxPutColors
+}
+/* end-test-block */

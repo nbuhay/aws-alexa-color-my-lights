@@ -8,3 +8,6 @@
 ### Node.js ###
 **/*node_modules/*
 **/package-lock.json
+
+### aws-alexa-color-my-lights ###
+build/
