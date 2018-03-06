@@ -1,0 +1,11 @@
+language: node_js
+node_js:
+  - 'node' 
+  - '8'
+env:
+  - NODE_ENV=test NODE_PATH='./'
+  - SPOTIFY_ID='SPOTIFY_DUMMY_ID'
+  - SPOTIFY_SECRET='SPOTIFY_DUMMY_SECRET'
+  - SPOTIFY_REFRESH_TOKEN='SPOTIFY_DUMMY_REFRESH'
+script:
+  - npm test
