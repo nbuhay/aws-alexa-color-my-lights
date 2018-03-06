@@ -19,6 +19,7 @@
     "gulp-strip-code": "^0.1.4",
     "istanbul": "^0.4.5",
     "mocha": "^5.0.1",
+    "nock": "^9.2.3",
     "readline-sync": "^1.4.9",
     "sinon": "^4.4.2"
   }
