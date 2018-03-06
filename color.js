@@ -28,9 +28,10 @@ let SPOTIFY_ACCESS_TOKEN = process.env.SPOTIFY_ACCESS_TOKEN
 async function color() {
   console.log('color start...')
   try {
-    // console.log(`pre call: SPOTIFY_ACCESS_TOKEN: ${SPOTIFY_ACCESS_TOKEN}`)
-    // await spotifyRefreshToken();
-    // console.log(`post call: SPOTIFY_ACCESS_TOKEN: ${SPOTIFY_ACCESS_TOKEN}`)
+
+    // console.log('get Spotify access token')
+    // SPOTIFY_ACCESS_TOKEN = await spotifyRefreshToken();
+
     console.log(`get currently playing track`)
     let currentlyPlaying = await spotifyGetCurrentlyPlaying();
 
@@ -80,9 +81,7 @@ function spotifyRefreshToken() {
         .on('end', () => {
           (res.statusCode !== 200) ?
             reject(`Spotify API error: ${JSON.parse(result).error}`) :
-            // store token globally
-            SPOTIFY_ACCESS_TOKEN = JSON.parse(result).access_token;
-          resolve();
+            resolve(JSON.parse(result).access_token);
         })
         .on('error', (err) => reject(err));
     });
