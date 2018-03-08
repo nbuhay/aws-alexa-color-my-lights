@@ -5,6 +5,7 @@ const https = require('https')
     , should = chai.should()
     , sinon = require('sinon')
     , nock = require('nock')
+    , AWS = require('aws-sdk-mock')
     , __test = require('color').__testonly__
 
 chai.use(chaiAsPromised);
@@ -18,7 +19,43 @@ describe('color.js', () => {
     sandbox = sinon.sandbox.create()
   });
 
-  afterEach(() => sandbox.restore());
+  afterEach(() => {
+    AWS.restore()
+    sandbox.restore()
+  });
+
+  describe('#getUser', () => {
+
+    it('should exist', () => should.exist(__test.getUser));
+
+    it('should reject with Error when DynamoDB returns err', () => {
+      let userId = 'Test-User-ID'
+        , expectedErrMsg = 'Dummy DynamoDB Error Message'
+        , docClientStub = sandbox.stub().yields(expectedErrMsg)
+
+      AWS.mock('DynamoDB.DocumentClient', 'get', docClientStub)
+
+      return __test.getUser(userId)
+        .should.eventually.be.rejectedWith(expectedErrMsg)
+    });
+
+    it('should get the user data from DynamoDB', () => {
+      let userId = 'Test-User-ID'
+        , params = {
+            TableName: 'AlbumColorUsers',
+            Key: {
+              'UserId': userId
+            }
+          }
+        , docClientStub = sandbox.stub().yields(null, params)
+
+      AWS.mock('DynamoDB.DocumentClient', 'get', docClientStub)
+
+      return __test.getUser(userId).then(() => 
+        docClientStub.calledOnceWith(params).should.be.true)
+    });
+
+  });
 
   describe('#spotifyRefreshToken', () => {
 
@@ -65,7 +102,7 @@ describe('color.js', () => {
 
     it('should throw Error when response is not 200', () => {
       const stubRes = { error: 'Test Error' }
-          , expectedErrMsg = `spotifyRefreshToken: Spotify API error: ${stubRes.error}`
+          , expectedErrMsg = `Spotify API error: ${stubRes.error}`
 
       // let httpsReqSpy = sandbox.spy(https, 'request')
 

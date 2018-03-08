@@ -57,6 +57,23 @@ async function color() {
   console.log('color end')
 }
 
+function getUser(userId) {
+  return new Promise((resolve, reject) => {
+    let docClient = AWS.DynamoDB.DocumentClient()
+      , params = {
+          TableName: 'AlbumColorUsers',
+          Key: {
+            'UserId': userId
+          }
+        }
+
+    docClient.get(params, (err, data) => {
+      (err) ? reject(err) : resolve(data);
+    })
+  })
+  .catch((err) => { throw new Error(`getUser: ${err}`) });
+}
+
 function spotifyRefreshToken() {
   return new Promise((resolve, reject) => {
     const basic_auth = `${SPOTIFY_ID}:${SPOTIFY_SECRET}`
@@ -274,6 +291,7 @@ module.exports = {
 
 /* start-test-block */
 module.exports.__testonly__ =  {
+  getUser: getUser,
   spotifyRefreshToken: spotifyRefreshToken,
   spotifyGetCurrentlyPlaying: spotifyGetCurrentlyPlaying,
   spotifyGetAlbumImage: spotifyGetAlbumImage,
